@@ -9,7 +9,8 @@ export class Day2 {
         }
     }
 
-    static run(input, configuration) {
+    static runPart1(input) {
+        const configuration = Day2.configurations.first;
         const lines = input.split("\n");
         let games = [], impossible = [];
         for (const line of lines) {
@@ -27,7 +28,35 @@ export class Day2 {
             }
             return a + g.id;
         }, 0);
-        console.log(`Result: ${result}`);
+        console.log(`Result part 1: ${result}`);
+    }
+
+    static runPart2(input) {
+        const lines = input.split("\n");
+        let powers = [];
+        for (const line of lines) {
+            const game = this.getGameInfo(line);
+            const minimumSet = this.getMinimumSetFromGame(game);
+            const power = Object.keys(minimumSet).reduce((a, k) => {
+                return a * minimumSet[k];
+            }, 1);
+            powers.push(power);
+        }
+        const result = powers.reduce((a, p) => {
+            return a + p;
+        }, 0);
+        console.log(`Result part 2: ${result}`);
+    }
+
+    static getMinimumSetFromGame(game) {
+        return game.cubeSets.reduce((a, s) => {
+            for (let cube of s) {
+                if (cube.count > a[cube.color]) {
+                    a[cube.color] = cube.count;
+                }
+            }
+            return a;
+        }, {red: 0, blue: 0, green: 0});
     }
 
     static getGameInfo(line) {
@@ -62,4 +91,5 @@ export class Day2 {
 const fileContent = fs.readFileSync(`inputs/2.txt`);
 const input = fileContent.toString();
 
-Day2.run(input, Day2.configurations.first);
+Day2.runPart1(input);
+Day2.runPart2(input);
