@@ -67,7 +67,5 @@ export class Day1 {
 const fileContent = fs.readFileSync(`inputs/1.txt`);
 const input = fileContent.toString();
 
-console.log(Day1.regexPart2);
-
 Day1.run(input, false);
 Day1.run(input, true);
