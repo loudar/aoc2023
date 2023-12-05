@@ -28,20 +28,21 @@ export class Day3 {
 
     static getRows(input) {
         const lines = input.split("\n");
-        const symbolsRegex = new RegExp(/[^.1-9]/gd);
+        const symbolsRegex = new RegExp(/[^.0-9]/gd);
+        const numbersRegex = new RegExp(/[0-9]+/gd);
         const rows = [];
         for (const line of lines) {
-            let numbers = line.split(/[^1-9]/);
+            let numbers = [...line.matchAll(numbersRegex)];
             numbers = numbers
-                .filter(n => n !== '')
                 .map(n => {
-                    const startIndex = line.indexOf(n);
+                    const startIndex = n.index;
                     return {
-                        number: parseInt(n),
+                        number: parseInt(n.toString()),
                         startIndex,
-                        endIndex: startIndex + n.length - 1
+                        endIndex: startIndex + n.toString().length - 1
                     };
                 });
+            console.log(numbers, line);
             const matchedSymbols = [...line.matchAll(symbolsRegex)];
             let symbols = [];
             if (matchedSymbols) {
