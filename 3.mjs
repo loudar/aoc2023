@@ -42,7 +42,6 @@ export class Day3 {
                         endIndex: startIndex + n.toString().length - 1
                     };
                 });
-            console.log(numbers, line);
             const matchedSymbols = [...line.matchAll(symbolsRegex)];
             let symbols = [];
             if (matchedSymbols) {
