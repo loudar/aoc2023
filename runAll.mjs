@@ -70,8 +70,8 @@ export class DayRunner {
             one: allResults.map(r => r.one.diff).reduce((a, d) => a + d, 0) / allResults.length,
             two: allResults.map(r => r.two.diff).reduce((a, d) => a + d, 0) / allResults.length,
         };
-        console.log(`Average timing for day ${day} part 1 with ${times} runs: ${Util.formatTime(averages.one)}`);
-        console.log(`Average timing for day ${day} part 2 with ${times} runs: ${Util.formatTime(averages.two)}`);
+        console.log(`Day ${day}, Part 1: ${Util.formatTime(averages.one)} (average over ${times} runs)`);
+        console.log(`Day ${day}, Part 2: ${Util.formatTime(averages.two)} (average over ${times} runs)`);
     }
 
     static runAllContinuously(times) {
