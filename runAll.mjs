@@ -4,6 +4,7 @@ import {Day2} from "./days/2.mjs";
 import {Day3} from "./days/3.mjs";
 import {Day4} from "./days/4.mjs";
 import {Util} from "./Util.mjs";
+import {Day5} from "./days/5.mjs";
 
 export class DayRunner {
     static getInputList() {
@@ -40,6 +41,9 @@ export class DayRunner {
             case 4:
                 dayClass = Day4;
                 break;
+            case 5:
+                dayClass = Day5;
+                break;
         }
 
         result1 = dayClass.runPart1(input);
@@ -75,7 +79,7 @@ export class DayRunner {
     }
 
     static runAllContinuously(times) {
-        const maxDays = 4;
+        const maxDays = 5;
         const inputMap = DayRunner.getInputList();
         for (let i = 1; i < maxDays + 1; i++) {
             this.runDayContinuously(i, times, inputMap);

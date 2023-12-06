@@ -1,24 +1,27 @@
-import fs from "fs";
-
 export class Day5 {
     static runPart1(input) {
         const parts = input.split("\r\n\r\n");
         const seeds = this.getSeeds(parts.shift());
         const lastValues = {};
+        for (const seed of seeds) {
+            lastValues[seed] = seed;
+        }
         for (const part of parts) {
             const map = this.getMap(part);
             for (const seed of seeds) {
                 const lookup = lastValues[seed];
-                let value = map.content[lookup];
-                if (!value) {
+                const entry = map.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
+                let value;
+                if (!entry) {
                     value = lookup;
+                } else {
+                    const difference = lookup - entry.originStart;
+                    value = entry.targetStart + difference;
                 }
                 lastValues[seed] = value;
             }
         }
-        const result = Math.min(...Object.values(lastValues));
-        console.log(`Result is ${result}`);
-        return result;
+        return Math.min(...Object.values(lastValues));
     }
 
     static getSeeds(line) {
@@ -28,32 +31,22 @@ export class Day5 {
     static getMap(part) {
         const mapParts = part.split(":");
         const nameParts = mapParts[0].split("-");
-        const origin = nameParts[0];
-        const target = nameParts[2];
-        const content = this.getMapContent(mapParts[1]);
         return {
-            origin,
-            target,
-            content
+            origin: nameParts[0],
+            target: nameParts[2],
+            content: this.getMapContent(mapParts[1])
         }
     }
 
     static getMapContent(part) {
         const lines = part.trim().split("\n");
-        const mapContent = new Map();
+        const mapContent = [];
         for (const line of lines) {
             const [targetStart, originStart, rangeLength] = line
                 .split(" ")
                 .map(p => parseInt(p));
-            for (let i = 0; i < rangeLength; i++) {
-                const index = originStart + i;
-                mapContent[index] = targetStart + i;
-            }
+            mapContent.push({ targetStart, originStart, rangeLength });
         }
         return mapContent;
     }
 }
-
-const fileContent = fs.readFileSync(`../inputs/5.txt`);
-const input = fileContent.toString();
-Day5.runPart1(input);
