@@ -7,21 +7,18 @@ export class Day4 {
         for (let line of lines) {
             cards.push(this.getCard(line));
         }
-        const toCheck = [...cards];
+        const cardIds = cards.map(c => c.id);
+        const toCheck = new Map();
+        cardIds.forEach(id => toCheck.set(id, 1));
         let totalCount = cards.length;
-        const addMap = new Map();
-        while (toCheck.length > 0) {
-            const cardToCheck = toCheck.shift();
-            let cardsToGet;
-            if (!addMap.has(cardToCheck.id)) {
-                cardsToGet = [...cards].filter(c => c.id > cardToCheck.id && c.id <= cardToCheck.id + cardToCheck.toAdd);
-                addMap.set(cardToCheck.id, cardsToGet);
-            } else {
-                cardsToGet = addMap.get(cardToCheck.id);
-            }
-            totalCount += cardsToGet.length;
-            toCheck.push(...cardsToGet);
-            console.log(Math.min(...toCheck.map(c => c.id)));
+        for (let i = 0; i < cardIds.length; i++) {
+            const checkId = i + 1;
+            const cardToCheck = cards.find(c => c.id === checkId);
+            const copies = toCheck.get(checkId);
+            console.log(`Checking ${checkId} (${copies} copies)`);
+            let cardsToGet = [...cardIds].filter(id => id > checkId && id <= checkId + cardToCheck.toAdd);
+            cardsToGet.forEach(id => toCheck.set(id, toCheck.get(id) + copies));
+            totalCount += cardsToGet.length * copies;
         }
         console.log(`Result is ${totalCount}`);
     }
