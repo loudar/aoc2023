@@ -1,4 +1,5 @@
 import fs from "fs";
+import {Util} from "./Util.mjs";
 
 export class Day4 {
     static run(input) {
@@ -15,7 +16,6 @@ export class Day4 {
             const checkId = i + 1;
             const cardToCheck = cards.find(c => c.id === checkId);
             const copies = toCheck.get(checkId);
-            console.log(`Checking ${checkId} (${copies} copies)`);
             let cardsToGet = [...cardIds].filter(id => id > checkId && id <= checkId + cardToCheck.toAdd);
             cardsToGet.forEach(id => toCheck.set(id, toCheck.get(id) + copies));
             totalCount += cardsToGet.length * copies;
@@ -64,4 +64,8 @@ Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
 Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
 Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`);
+const startTime = new Date();
 Day4.run(input);
+const endTime = new Date();
+const diff = endTime - startTime;
+console.log(`Day 4 Part 2 took ${Util.formatTime(diff)}`);

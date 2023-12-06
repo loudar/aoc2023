@@ -1,4 +1,5 @@
 import fs from "fs";
+import {Util} from "./Util.mjs";
 
 export class Day3 {
     static runPart1(input) {
@@ -118,4 +119,8 @@ Day3.runPart2(`467..114..
 ......755.
 ...$.*....
 .664.598..`);
+const startTime = new Date();
 Day3.runPart2(input);
+const endTime = new Date();
+const diff = endTime - startTime;
+console.log(`Day 3 Part 2 took ${Util.formatTime(diff)}`);
