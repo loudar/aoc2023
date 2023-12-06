@@ -13,6 +13,7 @@ export class DayRunner {
         list.push(this.getInputForDay(2));
         list.push(this.getInputForDay(3));
         list.push(this.getInputForDay(4));
+        list.push(this.getInputForDay(5));
         return list;
     }
 
