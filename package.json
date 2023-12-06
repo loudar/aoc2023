@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node 4.mjs"
+    "start": "node days/4.mjs"
   },
   "author": "",
   "license": "ISC"

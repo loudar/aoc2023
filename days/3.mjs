@@ -1,6 +1,3 @@
-import fs from "fs";
-import {Util} from "./Util.mjs";
-
 export class Day3 {
     static runPart1(input) {
         const rows = this.getRows(input);
@@ -23,8 +20,7 @@ export class Day3 {
                 }
             }
         }
-        const result = matchedNumbers.reduce((a, n) => a + n, 0);
-        console.log(`Result is ${result}`);
+        return matchedNumbers.reduce((a, n) => a + n, 0);
     }
 
     static runPart2(input) {
@@ -56,8 +52,7 @@ export class Day3 {
                 }
             }
         }
-        const result = multiplicationResults.reduce((a, n) => a + n, 0);
-        console.log(`Result is ${result}`);
+        return multiplicationResults.reduce((a, n) => a + n, 0);
     }
 
     static getRows(input) {
@@ -94,33 +89,3 @@ export class Day3 {
         return rows;
     }
 }
-
-const fileContent = fs.readFileSync(`inputs/3.txt`);
-const input = fileContent.toString();
-
-Day3.runPart1(`467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..`);
-Day3.runPart1(input);
-Day3.runPart2(`467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..`);
-const startTime = new Date();
-Day3.runPart2(input);
-const endTime = new Date();
-const diff = endTime - startTime;
-console.log(`Day 3 Part 2 took ${Util.formatTime(diff)}`);

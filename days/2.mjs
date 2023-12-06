@@ -1,5 +1,3 @@
-import fs from "fs";
-
 export class Day2 {
     static configurations = {
         first: {
@@ -22,13 +20,12 @@ export class Day2 {
                 }
             }
         }
-        const result = games.reduce((a, g) => {
+        return games.reduce((a, g) => {
             if (impossible.includes(g)) {
                 return a;
             }
             return a + g.id;
         }, 0);
-        console.log(`Result part 1: ${result}`);
     }
 
     static runPart2(input) {
@@ -45,7 +42,7 @@ export class Day2 {
         const result = powers.reduce((a, p) => {
             return a + p;
         }, 0);
-        console.log(`Result part 2: ${result}`);
+        return result;
     }
 
     static getMinimumSetFromGame(game) {
@@ -87,9 +84,3 @@ export class Day2 {
         return cubes;
     }
 }
-
-const fileContent = fs.readFileSync(`inputs/2.txt`);
-const input = fileContent.toString();
-
-Day2.runPart1(input);
-Day2.runPart2(input);

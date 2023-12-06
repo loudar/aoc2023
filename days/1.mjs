@@ -1,5 +1,3 @@
-import fs from 'fs';
-
 export class Day1 {
     static numberMap = {
         "one": 1,
@@ -20,6 +18,14 @@ export class Day1 {
         return Object.keys(Day1.numberMap).join('|');
     }
 
+    static runPart1(input) {
+        return this.run(input, false);
+    }
+
+    static runPart2(input) {
+        return this.run(input, true);
+    }
+
     static run(input, includeStringNumbers) {
         const lines = input.split("\n");
         let result = 0;
@@ -28,7 +34,7 @@ export class Day1 {
             const add = parseInt(numbers.first.toString() + numbers.last.toString());
             result += add;
         }
-        console.log(`result is: ${result}`);
+        return result;
     }
 
     static getNumbersInLine(line, includeStrings) {
@@ -63,9 +69,3 @@ export class Day1 {
         }
     }
 }
-
-const fileContent = fs.readFileSync(`inputs/1.txt`);
-const input = fileContent.toString();
-
-Day1.run(input, false);
-Day1.run(input, true);

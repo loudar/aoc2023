@@ -1,8 +1,25 @@
-import fs from "fs";
-import {Util} from "./Util.mjs";
-
 export class Day4 {
-    static run(input) {
+    static runPart1(input) {
+        const lines = input.split("\n");
+        let result = 0;
+        for (let line of lines) {
+            const card = this.getCard(line);
+            let cardValue = 0;
+            for (const n of card.numbers) {
+                if (card.winning.includes(n)) {
+                    if (cardValue === 0) {
+                        cardValue = 1;
+                    } else {
+                        cardValue *= 2;
+                    }
+                }
+            }
+            result += cardValue;
+        }
+        return result;
+    }
+
+    static runPart2(input) {
         const lines = input.split("\n");
         const cards = [];
         for (let line of lines) {
@@ -20,7 +37,7 @@ export class Day4 {
             cardsToGet.forEach(id => toCheck.set(id, toCheck.get(id) + copies));
             totalCount += cardsToGet.length * copies;
         }
-        console.log(`Result is ${totalCount}`);
+        return totalCount;
     }
 
     static getCard(line) {
@@ -54,18 +71,3 @@ export class Day4 {
         }
     }
 }
-
-const fileContent = fs.readFileSync(`inputs/4.txt`);
-const input = fileContent.toString();
-
-Day4.run(`Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
-Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
-Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
-Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
-Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
-Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`);
-const startTime = new Date();
-Day4.run(input);
-const endTime = new Date();
-const diff = endTime - startTime;
-console.log(`Day 4 Part 2 took ${Util.formatTime(diff)}`);
