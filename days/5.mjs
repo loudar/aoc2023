@@ -1,45 +1,24 @@
+import fs from "fs";
+
 export class Day5 {
     static runPart1(input) {
-        const info = this.getMaps(input);
-        const result = this.shortestFinal(info);
-        console.log(`Result is: ${result}`);
-        return result;
-    }
-
-    static shortestFinal(info) {
-        const values = [];
-        for (const seed of info.seeds) {
-            let valueMap = new Map();
-            const firstOrigin = info.maps[0].origin;
-            valueMap.set(firstOrigin, seed);
-            let lookup = seed;
-            for (const map of info.maps) {
-                lookup = map.content.get(lookup);
-            }
-            values.push(lookup);
-        }
-        return Math.min(...values);
-    }
-
-    static getMaps(input) {
-        const parts = input.split("\n\n");
-        const maps = [];
+        const parts = input.split("\r\n\r\n");
         const seeds = this.getSeeds(parts.shift());
-        let maxMapLength = 0;
+        const lastValues = {};
         for (const part of parts) {
             const map = this.getMap(part);
-            if (map.content.size > maxMapLength) {
-                maxMapLength = map.content.size;
+            for (const seed of seeds) {
+                const lookup = lastValues[seed];
+                let value = map.content[lookup];
+                if (!value) {
+                    value = lookup;
+                }
+                lastValues[seed] = value;
             }
-            maps.push(map);
         }
-        for (const map of maps) {
-            map.content = this.fillMapUntilIndex(map.content, maxMapLength);
-        }
-        return {
-            seeds,
-            maps
-        };
+        const result = Math.min(...Object.values(lastValues));
+        console.log(`Result is ${result}`);
+        return result;
     }
 
     static getSeeds(line) {
@@ -66,56 +45,15 @@ export class Day5 {
             const [targetStart, originStart, rangeLength] = line
                 .split(" ")
                 .map(p => parseInt(p));
-            this.fillMapUntilIndex(mapContent, originStart);
             for (let i = 0; i < rangeLength; i++) {
                 const index = originStart + i;
-                const targetIndex = targetStart + i;
-                mapContent.set(index, targetIndex);
+                mapContent[index] = targetStart + i;
             }
         }
         return mapContent;
     }
-
-    static fillMapUntilIndex(map, stopIndex) {
-        for (let i = 0; i < stopIndex; i++) {
-            if (!map.has(i)) {
-                map.set(i, i);
-            }
-        }
-        return map;
-    }
 }
 
-Day5.runPart1(`seeds: 79 14 55 13
-
-seed-to-soil map:
-50 98 2
-52 50 48
-
-soil-to-fertilizer map:
-0 15 37
-37 52 2
-39 0 15
-
-fertilizer-to-water map:
-49 53 8
-0 11 42
-42 0 7
-57 7 4
-
-water-to-light map:
-88 18 7
-18 25 70
-
-light-to-temperature map:
-45 77 23
-81 45 19
-68 64 13
-
-temperature-to-humidity map:
-0 69 1
-1 0 69
-
-humidity-to-location map:
-60 56 37
-56 93 4`);
+const fileContent = fs.readFileSync(`../inputs/5.txt`);
+const input = fileContent.toString();
+Day5.runPart1(input);
