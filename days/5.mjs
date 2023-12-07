@@ -34,30 +34,30 @@ export class Day5 {
             const partMap = this.getMap(part);
             console.log(`--- NEW PART: ${partMap.origin} to ${partMap.target} (${iterationMap.length} items) ---`);
             let nextMap = [];
-            let previousValue = -1, currentStart = 0, percentageDone = 0, k = 0;
+            let previousValue = -1, currentEntry = null, percentageDone = 0, k = 0;
             for (const iterationMapItem of iterationMap) {
                 k++;
-                if ((k / 5) % 0.1 === 0) {
-                    percentageDone = (k / iterationMap.length) * 100;
+                const progress = k / iterationMap.length;
+                if (progress % 0.1 === 0) {
+                    percentageDone = progress * 100;
                     console.log(`${percentageDone}%`);
                 }
                 for (let i = 0; i < iterationMapItem.length; i++) {
                     const lookup = iterationMapItem.targetStart + i;
-                    const entry = partMap.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
+                    const partEntry = partMap.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
                     let value;
-                    if (!entry) {
+                    if (!partEntry) {
                         value = lookup;
                     } else {
-                        const difference = lookup - entry.originStart;
-                        value = entry.targetStart + difference;
+                        value = partEntry.targetStart + (lookup - partEntry.originStart);
                     }
 
                     const continuationValue = previousValue + 1;
                     if (value > continuationValue || value < continuationValue) {
                         nextMap.push({ originStart: iterationMapItem.originStart + i, targetStart: value, length: 1 });
-                        currentStart = value;
+                        currentEntry = nextMap[nextMap.length - 1];
                     } else {
-                        nextMap.find(i => i.targetStart === currentStart).length += 1;
+                        currentEntry.length += 1;
                     }
 
                     previousValue = value;
@@ -78,7 +78,7 @@ export class Day5 {
     static getSeedsFromInfo(info) {
         const seeds = [];
         let i = 0;
-        while (i < info.length / 2) {
+        while (i < info.length) {
             const start = info[i];
             const length = info[i + 1];
             seeds.push({ targetStart: start, originStart: start, length });
