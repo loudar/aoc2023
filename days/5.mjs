@@ -32,10 +32,15 @@ export class Day5 {
         let iterationMap = this.getSeedsFromInfo(seedInfo);
         for (const part of parts) {
             const partMap = this.getMap(part);
-            console.log(`--- NEW PART: ${partMap.origin} to ${partMap.target} ---`);
+            console.log(`--- NEW PART: ${partMap.origin} to ${partMap.target} (${iterationMap.length} items) ---`);
             let nextMap = [];
-            let previousValue = -1, currentStart = 0;
+            let previousValue = -1, currentStart = 0, percentageDone = 0, k = 0;
             for (const iterationMapItem of iterationMap) {
+                k++;
+                if ((k / 5) % 0.1 === 0) {
+                    percentageDone = (k / iterationMap.length) * 100;
+                    console.log(`${percentageDone}%`);
+                }
                 for (let i = 0; i < iterationMapItem.length; i++) {
                     const lookup = iterationMapItem.targetStart + i;
                     const entry = partMap.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
@@ -58,9 +63,9 @@ export class Day5 {
                     previousValue = value;
                 }
             }
-            console.log(nextMap);
             iterationMap = nextMap;
         }
+        console.log(`Final map: `, iterationMap);
         const result = Math.min(...iterationMap.map(e => e.targetStart));
         console.log(`Result is ${result}`);
         return result;
