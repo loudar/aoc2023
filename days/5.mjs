@@ -29,27 +29,41 @@ export class Day5 {
     static runPart2(input) {
         const parts = input.split("\r\n\r\n");
         const seedInfo = this.getSeedsLine(parts.shift());
-        const seeds = this.getSeedsFromInfo(seedInfo);
-        const lastValues = {};
-        for (const seed of seeds) {
-            lastValues[seed] = seed;
-        }
+        let iterationMap = this.getSeedsFromInfo(seedInfo);
         for (const part of parts) {
-            const map = this.getMap(part);
-            for (const seed of seeds) {
-                const lookup = lastValues[seed];
-                const entry = map.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
-                let value;
-                if (!entry) {
-                    value = lookup;
-                } else {
-                    const difference = lookup - entry.originStart;
-                    value = entry.targetStart + difference;
+            const partMap = this.getMap(part);
+            console.log(`--- NEW PART: ${partMap.origin} to ${partMap.target} ---`);
+            let nextMap = [];
+            let previousValue = -1, currentStart = 0;
+            for (const iterationMapItem of iterationMap) {
+                for (let i = 0; i < iterationMapItem.length; i++) {
+                    const lookup = iterationMapItem.targetStart + i;
+                    const entry = partMap.content.find(i => lookup >= i.originStart && lookup <= i.originStart + i.rangeLength);
+                    let value;
+                    if (!entry) {
+                        value = lookup;
+                    } else {
+                        const difference = lookup - entry.originStart;
+                        value = entry.targetStart + difference;
+                    }
+
+                    const continuationValue = previousValue + 1;
+                    if (value > continuationValue || value < continuationValue) {
+                        nextMap.push({ originStart: iterationMapItem.originStart + i, targetStart: value, length: 1 });
+                        currentStart = value;
+                    } else {
+                        nextMap.find(i => i.targetStart === currentStart).length += 1;
+                    }
+
+                    previousValue = value;
                 }
-                lastValues[seed] = value;
             }
+            console.log(nextMap);
+            iterationMap = nextMap;
         }
-        return Math.min(...Object.values(lastValues));
+        const result = Math.min(...iterationMap.map(e => e.targetStart));
+        console.log(`Result is ${result}`);
+        return result;
     }
 
     static getSeedsLine(line) {
@@ -58,10 +72,12 @@ export class Day5 {
 
     static getSeedsFromInfo(info) {
         const seeds = [];
-        for (let i = 0; i < info.length; i + 2) {
+        let i = 0;
+        while (i < info.length / 2) {
             const start = info[i];
             const length = info[i + 1];
-            seeds.push({ start, length });
+            seeds.push({ targetStart: start, originStart: start, length });
+            i += 2;
         }
         return seeds;
     }
