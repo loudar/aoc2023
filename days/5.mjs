@@ -109,7 +109,3 @@ export class Day5 {
         return mapContent;
     }
 }
-
-const fileContent = fs.readFileSync(`../inputs/5.txt`);
-const input = fileContent.toString();
-Day5.runPart2(input);

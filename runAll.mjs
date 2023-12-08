@@ -5,6 +5,7 @@ import {Day3} from "./days/3.mjs";
 import {Day4} from "./days/4.mjs";
 import {Util} from "./Util.mjs";
 import {Day5} from "./days/5.mjs";
+import {Day6} from "./days/6.mjs";
 
 export class DayRunner {
     static getInputList() {
@@ -14,6 +15,7 @@ export class DayRunner {
         list.push(this.getInputForDay(3));
         list.push(this.getInputForDay(4));
         list.push(this.getInputForDay(5));
+        list.push(this.getInputForDay(6));
         return list;
     }
 
@@ -45,6 +47,9 @@ export class DayRunner {
             case 5:
                 dayClass = Day5;
                 break;
+            case 6:
+                dayClass = Day6;
+                break;
         }
 
         result1 = dayClass.runPart1(input);
@@ -68,24 +73,28 @@ export class DayRunner {
 
     static runDayContinuously(day, times, inputMap) {
         let allResults = [];
+        let results;
         for (let i = 0; i < times; i++) {
-            allResults.push(this.runDay(day, inputMap));
+            const result = this.runDay(day, inputMap);
+            if (!results) {
+                results = result;
+            }
+            allResults.push(result);
         }
         const averages = {
             one: allResults.map(r => r.one.diff).reduce((a, d) => a + d, 0) / allResults.length,
             two: allResults.map(r => r.two.diff).reduce((a, d) => a + d, 0) / allResults.length,
         };
-        console.log(`Day ${day}, Part 1: ${Util.formatTime(averages.one)} (average over ${times} runs)`);
-        console.log(`Day ${day}, Part 2: ${Util.formatTime(averages.two)} (average over ${times} runs)`);
+        console.log(`Day ${day}, Part 1: ${Util.formatTime(averages.one)} (average over ${times} runs): ${results.one.result}`);
+        console.log(`Day ${day}, Part 2: ${Util.formatTime(averages.two)} (average over ${times} runs): ${results.two.result}`);
     }
 
-    static runAllContinuously(times) {
-        const maxDays = 5;
+    static runAllContinuously(startDay, endDay, times) {
         const inputMap = DayRunner.getInputList();
-        for (let i = 1; i < maxDays + 1; i++) {
+        for (let i = startDay; i < endDay + 1; i++) {
             this.runDayContinuously(i, times, inputMap);
         }
     }
 }
 
-DayRunner.runAllContinuously(10000);
+DayRunner.runAllContinuously(6, 6, 1);
