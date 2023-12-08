@@ -79,13 +79,12 @@ export class DayRunner {
         console.log(`Day ${day}, Part 2: ${Util.formatTime(averages.two)} (average over ${times} runs)`);
     }
 
-    static runAllContinuously(times) {
-        const maxDays = 5;
+    static runAllContinuously(startDay, endDay, times) {
         const inputMap = DayRunner.getInputList();
-        for (let i = 1; i < maxDays + 1; i++) {
+        for (let i = startDay; i < endDay + 1; i++) {
             this.runDayContinuously(i, times, inputMap);
         }
     }
 }
 
-DayRunner.runAllContinuously(10000);
+DayRunner.runAllContinuously(5, 5, 10000);
