@@ -81,7 +81,7 @@ export class Day5 {
         const offset = iterationMap.start - partEntry.originStart;
         const availableLength = partEntry.rangeLength - offset;
         const remainingLength = availableLength - iterationMap.length;
-        if (remainingLength > 0) {
+        if (remainingLength >= 0) {
             return {
                 result: [
                     ...existingParts,
