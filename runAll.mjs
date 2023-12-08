@@ -97,4 +97,4 @@ export class DayRunner {
     }
 }
 
-await DayRunner.runAllContinuously(6, 6, 1000);
+await DayRunner.runAllContinuously(6, 6, 10000);
