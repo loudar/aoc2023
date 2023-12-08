@@ -1,38 +1,24 @@
 export class Day6 {
-    static runPart1(input) {
+    static async runPart1(input) {
         const lines = input.split("\n").map(l => l.trim());
         const numbersRegex = new RegExp(/\d+/g);
         const times = [...lines[0].matchAll(numbersRegex)].map(t => parseInt(t));
         const distances = [...lines[1].matchAll(numbersRegex)].map(d => parseInt(d));
-        let result = 1;
-        for (let i = 0; i < times.length; i++) {
-            result *= this.getTimesToBeatDistance(times[i], distances[i]);
-            console.log(this.getWinningCount(times[i], distances[i]));
-        }
-        return result;
+        let promises = times.map((time, index) => this.getTimesToBeatDistance(time, distances[index]));
+        return Promise.all(promises)
+            .then(results => results.reduce((total, curr) => total * curr, 1));
     }
 
-    static runPart2(input) {
-        return this.runPart1(input.replaceAll(" ", ""));
-    }
-
-    static getWinningCount(time, wonDistance) {
-        let shorterHoldDistance = Infinity;
-        let resultCount = 0;
-        for (let i = 0; i < time; i++) {
-            shorterHoldDistance = (time - i) * i;
-            if (shorterHoldDistance > wonDistance) {
-                resultCount++;
-            }
-        }
-        return resultCount;
+    static async runPart2(input) {
+        return await this.runPart1(input.replaceAll(" ", ""));
     }
 
     static getTimesToBeatDistance(time, wonDistance) {
-        const bestTime = Math.floor(time / 2);
-        const bestDistance = (time - bestTime) * bestTime;
-        const countHalf = (bestDistance - wonDistance);
-        console.log(countHalf * 2);
-        return countHalf * 2;
+        const timeForWonDistance = Math.floor(this.inverseFunction(time, wonDistance)) + 1;
+        return (time + 1) - (timeForWonDistance * 2);
+    }
+
+    static inverseFunction(totalTime, result) {
+        return (totalTime - Math.sqrt(totalTime ** 2 - 4 * result)) / 2;
     }
 }

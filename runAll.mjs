@@ -24,7 +24,7 @@ export class DayRunner {
         return fileContent.toString();
     }
 
-    static runDay(day, inputMap) {
+    static async runDay(day, inputMap) {
         const input = inputMap[day - 1];
         const startTime = new Date();
         let endTime1, endTime2;
@@ -52,9 +52,9 @@ export class DayRunner {
                 break;
         }
 
-        result1 = dayClass.runPart1(input);
+        result1 = await dayClass.runPart1(input);
         endTime1 = new Date();
-        result2 = dayClass.runPart2(input);
+        result2 = await dayClass.runPart2(input);
         endTime2 = new Date();
 
         const diff1 = endTime1 - startTime;
@@ -71,11 +71,11 @@ export class DayRunner {
         }
     }
 
-    static runDayContinuously(day, times, inputMap) {
+    static async runDayContinuously(day, times, inputMap) {
         let allResults = [];
         let results;
         for (let i = 0; i < times; i++) {
-            const result = this.runDay(day, inputMap);
+            const result = await this.runDay(day, inputMap);
             if (!results) {
                 results = result;
             }
@@ -89,12 +89,12 @@ export class DayRunner {
         console.log(`Day ${day}, Part 2: ${Util.formatTime(averages.two)} (average over ${times} runs): ${results.two.result}`);
     }
 
-    static runAllContinuously(startDay, endDay, times) {
+    static async runAllContinuously(startDay, endDay, times) {
         const inputMap = DayRunner.getInputList();
         for (let i = startDay; i < endDay + 1; i++) {
-            this.runDayContinuously(i, times, inputMap);
+            await this.runDayContinuously(i, times, inputMap);
         }
     }
 }
 
-DayRunner.runAllContinuously(6, 6, 1);
+await DayRunner.runAllContinuously(6, 6, 1000);
