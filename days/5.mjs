@@ -47,10 +47,12 @@ export class Day5 {
                 if (result.remaining > 0) {
                     while (result.remaining > 0) {
                         const lastItem = nextMap[nextMap.length - 1];
-                        result = this.smartPartSearch({
-                            start: lastItem.start + lastItem.length + 1,
-                            length: result.remaining
-                        }, partMap, nextMap);
+                        const newSearch = {
+                            start: iterationMapItem.start + lastItem.length + 1,
+                            length: result.remaining - 1
+                        };
+                        console.log({newSearch});
+                        result = this.smartPartSearch(newSearch, partMap, nextMap);
                         nextMap = result.result;
                     }
                 }
@@ -82,6 +84,10 @@ export class Day5 {
         const availableLength = partEntry.rangeLength - offset;
         const remainingLength = availableLength - iterationMap.length;
         if (remainingLength >= 0) {
+            console.log({
+                start: partEntry.targetStart + offset,
+                length: iterationMap.length
+            });
             return {
                 result: [
                     ...existingParts,
@@ -93,6 +99,7 @@ export class Day5 {
                 remaining: 0
             };
         } else {
+            console.log(iterationMap.start + offset, partEntry.targetStart + partEntry.rangeLength, remainingLength);
             return {
                 result: [
                     ...existingParts,
