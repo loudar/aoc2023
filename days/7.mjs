@@ -37,7 +37,6 @@ export class Day7 {
         const cards = parts[0];
         const bidAmount = parts[1];
         const type = Day7.getHandType(cards);
-        console.log(line, type);
         return {
             cards,
             bidAmount,
